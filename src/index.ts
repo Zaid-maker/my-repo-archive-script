@@ -1,4 +1,5 @@
-import { processRepositories, ProcessOptions } from './archiveManager';
+import { processRepositories } from './archiveManager';
+import type { ProcessOptions } from './archiveManager';
 import { updateLogFile, updateJsonLogFile } from './logger';
 import { sendDiscordNotification } from './notifications';
 
