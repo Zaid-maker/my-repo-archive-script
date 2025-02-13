@@ -25,4 +25,4 @@ jobs:
           bun-version: latest
 
       - name: Install
-        run: bun insall
+        run: bun install
