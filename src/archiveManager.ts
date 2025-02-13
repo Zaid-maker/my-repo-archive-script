@@ -3,11 +3,10 @@ import { getRepositories, archiveRepository, unarchiveRepository } from './githu
 import { STALE_MONTHS } from './config';
 import type { LogEntry } from './logger';
 
-function isStale(pushedAt: string, staleMonths: number): boolean {
-    const pushedDate = new Date(pushedAt);
-    const cutoffDate = new Date();
-    cutoffDate.setMonth(cutoffDate.getMonth() - staleMonths);
-    return pushedDate < cutoffDate;
+export interface ProcessOptions {
+    dryRun?: boolean;
+    staleMonths?: number;
+    verbose?: boolean;
 }
 
 export interface ProcessResult {
@@ -17,7 +16,15 @@ export interface ProcessResult {
     logEntries: LogEntry[];
 }
 
-export async function processRepositories(): Promise<ProcessResult> {
+function isStale(pushedAt: string, staleMonths: number): boolean {
+    const pushedDate = new Date(pushedAt);
+    const cutoffDate = new Date();
+    cutoffDate.setMonth(cutoffDate.getMonth() - staleMonths);
+    return pushedDate < cutoffDate;
+}
+
+export async function processRepositories(options?: ProcessOptions): Promise<ProcessResult> {
+    const { dryRun = false, staleMonths = STALE_MONTHS, verbose = false } = options || {};
     const repos: RepoInfo[] = await getRepositories();
     const logEntries: LogEntry[] = [];
     const nowDate = new Date().toLocaleDateString();
@@ -26,11 +33,12 @@ export async function processRepositories(): Promise<ProcessResult> {
     let unarchivedCount = 0;
 
     for (const repo of repos) {
-        // Archive repos that are active (not archived) and stale.
-        if (!repo.archived && isStale(repo.pushed_at, STALE_MONTHS)) {
-            const success = await archiveRepository(repo.name);
-            if (success) {
-                archivedCount++;
+        if (verbose) {
+            console.log(`Processing repository: ${repo.name}`);
+        }
+        if (!repo.archived && isStale(repo.pushed_at, staleMonths)) {
+            if (dryRun) {
+                console.log(`[Dry Run] Would archive repository: ${repo.name}`);
                 logEntries.push({
                     repoName: repo.name,
                     repoUrl: repo.html_url,
@@ -38,13 +46,23 @@ export async function processRepositories(): Promise<ProcessResult> {
                     eventDate: nowDate,
                     action: 'archived',
                 });
+                archivedCount++;
+            } else {
+                const success = await archiveRepository(repo.name);
+                if (success) {
+                    archivedCount++;
+                    logEntries.push({
+                        repoName: repo.name,
+                        repoUrl: repo.html_url,
+                        lastPushed: repo.pushed_at,
+                        eventDate: nowDate,
+                        action: 'archived',
+                    });
+                }
             }
-        }
-        // Unarchive repos that are archived but have recent updates.
-        else if (repo.archived && !isStale(repo.pushed_at, STALE_MONTHS)) {
-            const success = await unarchiveRepository(repo.name);
-            if (success) {
-                unarchivedCount++;
+        } else if (repo.archived && !isStale(repo.pushed_at, staleMonths)) {
+            if (dryRun) {
+                console.log(`[Dry Run] Would unarchive repository: ${repo.name}`);
                 logEntries.push({
                     repoName: repo.name,
                     repoUrl: repo.html_url,
@@ -52,6 +70,19 @@ export async function processRepositories(): Promise<ProcessResult> {
                     eventDate: nowDate,
                     action: 'unarchived',
                 });
+                unarchivedCount++;
+            } else {
+                const success = await unarchiveRepository(repo.name);
+                if (success) {
+                    unarchivedCount++;
+                    logEntries.push({
+                        repoName: repo.name,
+                        repoUrl: repo.html_url,
+                        lastPushed: repo.pushed_at,
+                        eventDate: nowDate,
+                        action: 'unarchived',
+                    });
+                }
             }
         }
     }
