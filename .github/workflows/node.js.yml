@@ -30,7 +30,7 @@ jobs:
         run: bun install
 
       - name: Run script
-        run: bun run archiveRepo.ts
+        run: bun run archive
         env:
           MY_GITHUB_USERNAME: ${{ secrets.MY_GITHUB_USERNAME }}
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

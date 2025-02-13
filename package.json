@@ -1,7 +1,10 @@
 {
   "name": "archive-repos",
-  "module": "index.ts",
+  "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "archive": "bun run src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
