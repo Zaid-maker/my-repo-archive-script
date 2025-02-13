@@ -35,3 +35,4 @@ jobs:
           MY_GITHUB_USERNAME: ${{ secrets.MY_GITHUB_USERNAME }}
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           STALE_MONTHS: 2
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
