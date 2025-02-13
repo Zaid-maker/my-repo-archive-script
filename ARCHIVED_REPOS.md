@@ -97,4 +97,3 @@ This log contains the list of repositories that have been archived due to inacti
 | Gamehub | 12/9/2024 | 2/13/2025 |
 | genius-ai | 11/29/2023 | 2/13/2025 |
 | GitFinder | 5/28/2023 | 2/13/2025 |
-| [Gamehub](https://github.com/Zaid-maker/Gamehub) | 12/9/2024 | 2/13/2025 | unarchived |
