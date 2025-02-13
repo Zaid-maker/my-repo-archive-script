@@ -1,16 +1,16 @@
 import axios from 'axios';
-import { SLACK_WEBHOOK_URL } from './config';
+import { DISCORD_WEBHOOK_URL } from './config';
 
-export async function sendSlackNotification(message: string): Promise<void> {
-    if (!SLACK_WEBHOOK_URL) {
-        console.log('No Slack webhook URL configured, skipping Slack notification.');
-        return;
-    }
-
-    try {
-        await axios.post(SLACK_WEBHOOK_URL, { text: message });
-        console.log('Slack notification sent.');
-    } catch (error) {
-        console.error('Failed to send Slack notification:', error);
-    }
+export async function sendDiscordNotification(message: string): Promise<void> {
+  if (!DISCORD_WEBHOOK_URL) {
+    console.log('No Discord webhook URL configured, skipping Discord notification.');
+    return;
+  }
+  
+  try {
+    await axios.post(DISCORD_WEBHOOK_URL, { content: message });
+    console.log('Discord notification sent.');
+  } catch (error) {
+    console.error('Failed to send Discord notification:', error);
+  }
 }

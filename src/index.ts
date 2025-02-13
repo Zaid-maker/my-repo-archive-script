@@ -1,8 +1,8 @@
 import { processRepositories, ProcessOptions } from './archiveManager';
 import { updateLogFile, updateJsonLogFile } from './logger';
-import { sendSlackNotification } from './notifications';
+import { sendDiscordNotification } from './notifications';
 
-// Simple command-line argument parsing (consider using a library like yargs for more complex needs)
+// Command-line argument parsing...
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
 const verbose = args.includes('--verbose');
@@ -26,17 +26,17 @@ async function main(): Promise<void> {
     }
 
     const summaryMessage = `
-    Repository Processing Summary:
-    Total repositories processed: ${result.total}
-    Repositories archived: ${result.archivedCount}
-    Repositories unarchived: ${result.unarchivedCount}
-    Dry-run mode: ${dryRun ? 'Enabled' : 'Disabled'}
-    `;
+Repository Processing Summary:
+Total repositories processed: ${result.total}
+Repositories archived: ${result.archivedCount}
+Repositories unarchived: ${result.unarchivedCount}
+Dry-run mode: ${dryRun ? 'Enabled' : 'Disabled'}
+`;
 
     console.log(summaryMessage);
 
-    // Optionally send a Slack notification with the summary
-    await sendSlackNotification(summaryMessage);
+    // Send a Discord notification with the summary
+    await sendDiscordNotification(summaryMessage);
 }
 
 main().catch((error) => {
