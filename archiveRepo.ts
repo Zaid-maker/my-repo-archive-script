@@ -4,7 +4,7 @@ import { writeFileSync } from 'fs';
 
 dotenv.config();
 
-const GITHUB_USERNAME = process.env.GITHUB_USERNAME;
+const GITHUB_USERNAME = process.env.MY_GITHUB_USERNAME;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_API_URL = 'https://api.github.com';
 
