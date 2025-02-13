@@ -39,8 +39,10 @@ export async function archiveRepository(repoName: string): Promise<boolean> {
 
 export async function unarchiveRepository(repoName: string): Promise<boolean> {
     try {
-        await axiosInstance.patch(`/repos/${GITHUB_USERNAME}/${repoName}`, { archived: false });
-        console.log(`Unarchived repository: ${repoName}`);
+        const response = await axiosInstance.patch(`/repos/${GITHUB_USERNAME}/${repoName}`, {
+            archived: false,
+        });
+        console.log(`Unarchived repository: ${repoName} with status: ${response.status}`);
         return true;
     } catch (error) {
         console.error(`Failed to unarchive ${repoName}:`, error);
