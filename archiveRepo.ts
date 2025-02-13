@@ -9,7 +9,7 @@ const GITHUB_TOKEN = process.env.MY_GITHUB_TOKEN;
 const GITHUB_API_URL = 'https://api.github.com';
 
 if (!GITHUB_USERNAME || !GITHUB_TOKEN) {
-    console.error('Please set GITHUB_USERNAME and GITHUB_TOKEN in the .env file.');
+    console.error('Please set MY_GITHUB_USERNAME and MY_GITHUB_TOKEN in the .env file.');
     process.exit(1);
 }
 
