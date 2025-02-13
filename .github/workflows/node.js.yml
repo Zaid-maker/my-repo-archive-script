@@ -33,4 +33,4 @@ jobs:
         run: bun run archiveRepo.ts
         env:
           GITHUB_USERNAME: ${{ secrets.MY_GITHUB_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
